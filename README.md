@@ -1,32 +1,43 @@
-# Microscopy Cell Counting (PyTorch)
+# Microscopy Cell Counting (DL)
 
-A compact CNN regressor for microscopy **cell counting** using label masks as supervision (count = non‑zero pixels). Notebook-first repo; lightweight and reproducible.
-
-## TL;DR
-- **Data**: 200 images (train/val split ~180/20). Single-channel (blue) pipeline; H/V flips.
-- **Model**: 4×(Conv‑BN‑ReLU‑MaxPool) → GlobalAvgPool → Linear (count). Loss: **MSE**. Optim: **Adam**. **StepLR** scheduler.
-- **Training**: ~130 epochs, fixed seed, best‑epoch checkpointing.
-- **Result**: **Validation MAE ↓ ~170 → ~2.69** (notebook logs at end).
-
-## Repo Layout
-```
-.
-├─ notebooks/
-│  └─ counting_cells.ipynb        # main notebook
-├─ data/
-│  └─ sample/                     # tiny sample for structure only
-│     ├─ train_images/  train_labels/
-│     └─ val_images/    val_labels/
-├─ requirements.txt
-└─ README.md
-```
+PyTorch project to **count cells** in 256×256 microscopy images by regressing the total count from an image.
+Uses a small fully‑convolutional CNN on the **blue channel** with light flips, MSE loss, Adam, and MAE as the key metric.
 
 ## Data
-- Labels are binary masks; the *target count* is the number of non‑zero pixels in the label image.
-- This repo ships **only a tiny sample** under `data/sample/` for structure. Use the full dataset locally.
-- Update paths in the notebook’s first cell if needed.
+Paired folders of images and binary “dots” labels (same size, 256×256). Example layout:
+```
+counting_cells_data/
+  train_images/    # input images (e.g., ...123cell.png)
+  train_labels/    # labels (e.g., 123dots.png)
+  val_images/
+  val_labels/
+```
+> Files are matched by the 3 digits before “cell” → `{XXX}dots.png`.
 
-## Results (Table)
-| Split | MAE | Notes |
-|------:|----:|:------|
-| Val   | **2.69** | Best‑epoch checkpoint; ~130 epochs |
+## Quickstart
+1) **Install**
+```
+pip install torch torchvision matplotlib numpy pillow
+```
+2) **Set dataset paths** in `model_training_nb.ipynb`:
+```
+train_folder       = ".../counting_cells_data/train_images"
+train_labels_folder= ".../counting_cells_data/train_labels"
+val_folder         = ".../counting_cells_data/val_images"
+val_label_folder   = ".../counting_cells_data/val_labels"
+```
+3) **Run the notebook** (CPU or GPU). Artifacts are saved to:
+```
+./results_blue_unnorm_flips/
+  ├── best_model_blue_unnorm_flips.pth
+  └── training_curves_blue_unnorm_flips.png
+```
+
+## Notes
+- Model: `SimpleConvCounter(input_channels=1, initial_filters=32)`; **blue‑channel only** (`select_blue_channel`), **no normalization**.
+- Default training config: `batch_size=32`, `epochs=10`, `lr=1e-3`, `MSELoss → minimize MAE`.
+- Reproducibility: fixed seeds; deterministic dataloaders on Windows (`num_workers=0`).
+
+---
+Data from "Detecting Repeating Objects using Patch Correlation Analysis" by Inbar Huberman-Spiegelglas
+
