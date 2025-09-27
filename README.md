@@ -4,7 +4,15 @@ PyTorch project to **count cells** in 256×256 microscopy images by regressing t
 Uses a small fully‑convolutional CNN on the **blue channel** with light flips, MSE loss, Adam, and MAE as the key metric.
 
 ## Data
-Paired folders of 256×256 microscopy RGB images with cells of varying sizes, and binary “dots” labels with one dot at each cell center (same size, 256×256). Example layout:
+Paired folders of 256×256 microscopy RGB images with cells of varying sizes:
+
+![train_image](/counting_cells_data/train_images/002cell.png)
+
+and binary “dots” labels with one dot at each cell center (same size, 256×256): 
+
+![train_label](/counting_cells_data/train_labels/002dots.png)
+
+Example layout:
 ```
 counting_cells_data/
   train_images/    # input images (e.g., ...123cell.png)
