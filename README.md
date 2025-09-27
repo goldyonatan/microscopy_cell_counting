@@ -12,7 +12,7 @@ and binary “dots” labels with one dot at each cell center (same size, 256×2
 
 ![train_label](/counting_cells_data/train_labels/002dots.png)
 
-Example layout:
+Example data folders layout:
 ```
 counting_cells_data/
   train_images/    # input images (e.g., ...123cell.png)
@@ -21,6 +21,11 @@ counting_cells_data/
   val_labels/
 ```
 > Files are matched by the 3 digits before “cell” → `{XXX}dots.png`.
+
+## Results
+- **Best validation MAE:** **2.65** (lower is better).
+
+![Train/Val Loss & MAE](train_val_loss_mae.png)
 
 ## Quickstart
 1) **Install**
