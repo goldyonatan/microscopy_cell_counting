@@ -23,7 +23,7 @@ counting_cells_data/
 > Files are matched by the 3 digits before “cell” → `{XXX}dots.png`.
 
 ## Results
-- **Best validation MAE:** **2.65** (lower is better).
+**Best validation MAE:** **2.65** (lower is better).
 
 ![Train/Val Loss & MAE](train_val_loss_mae.png)
 
